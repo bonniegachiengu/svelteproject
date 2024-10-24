@@ -1,23 +1,22 @@
 <script>
-	let name = 'Yoshi';
+	let firstName = 'Yoshi';
+	let lastName = 'Kawasaki';
 	let beltColor = 'black';
 
-	const handleClick = () => {
-		beltColor = beltColor === 'black' ? 'magenta' : 'black';
-	};
+	$: fullName = `${firstName} ${lastName}`;
+	$: {
+		console.log(fullName);
+		console.log(beltColor);
+	}
 
-	// const handleInput = (e) => {
-	// 	beltColor = e.target.value;
-	// };
 </script>
 
 <!--Component - Main content-->
 <main>
-	<h1>Hello {name}!</h1>
-	<p style="color: {beltColor}">{beltColor} belt</p>
-	<button on:click={handleClick}>Change belt color</button>
-	<!-- <input type="text" on:input={handleInput} value={beltColor}/> --> 
-	<input type="text" bind:value={beltColor}/> <!-- Two-way binding -->
+	<p>{fullName} - {beltColor} belt</p>
+	<input type="text" bind:value={firstName}>
+	<input type="text" bind:value={lastName}>
+	<input type="text" bind:value={beltColor}> <!-- Two-way binding -->
 </main>
 
 <style>
