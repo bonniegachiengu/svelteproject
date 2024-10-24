@@ -60,6 +60,17 @@ var app = (function () {
     function children(element) {
         return Array.from(element.childNodes);
     }
+    function set_input_value(input, value) {
+        input.value = value == null ? '' : value;
+    }
+    function set_style(node, key, value, important) {
+        if (value == null) {
+            node.style.removeProperty(key);
+        }
+        else {
+            node.style.setProperty(key, value, important ? 'important' : '');
+        }
+    }
     function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
         const e = document.createEvent('CustomEvent');
         e.initCustomEvent(type, bubbles, cancelable, detail);
@@ -400,6 +411,8 @@ var app = (function () {
     	let t5;
     	let t6;
     	let button;
+    	let t8;
+    	let input;
     	let mounted;
     	let dispose;
 
@@ -415,12 +428,17 @@ var app = (function () {
     			t6 = space();
     			button = element("button");
     			button.textContent = "Change belt color";
+    			t8 = space();
+    			input = element("input");
     			attr_dev(h1, "class", "svelte-1tky8bj");
-    			add_location(h1, file, 11, 1, 198);
-    			add_location(p, file, 12, 1, 222);
-    			add_location(button, file, 13, 1, 247);
+    			add_location(h1, file, 15, 1, 274);
+    			set_style(p, "color", /*beltColor*/ ctx[0]);
+    			add_location(p, file, 16, 1, 298);
+    			add_location(button, file, 17, 1, 350);
+    			attr_dev(input, "type", "text");
+    			add_location(input, file, 19, 1, 482);
     			attr_dev(main, "class", "svelte-1tky8bj");
-    			add_location(main, file, 10, 0, 190);
+    			add_location(main, file, 14, 0, 266);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -434,21 +452,36 @@ var app = (function () {
     			append_dev(p, t5);
     			append_dev(main, t6);
     			append_dev(main, button);
+    			append_dev(main, t8);
+    			append_dev(main, input);
+    			set_input_value(input, /*beltColor*/ ctx[0]);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*handleClick*/ ctx[2], false, false, false, false);
+    				dispose = [
+    					listen_dev(button, "click", /*handleClick*/ ctx[2], false, false, false, false),
+    					listen_dev(input, "input", /*input_input_handler*/ ctx[3])
+    				];
+
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
     			if (dirty & /*beltColor*/ 1) set_data_dev(t4, /*beltColor*/ ctx[0]);
+
+    			if (dirty & /*beltColor*/ 1) {
+    				set_style(p, "color", /*beltColor*/ ctx[0]);
+    			}
+
+    			if (dirty & /*beltColor*/ 1 && input.value !== /*beltColor*/ ctx[0]) {
+    				set_input_value(input, /*beltColor*/ ctx[0]);
+    			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -470,7 +503,7 @@ var app = (function () {
     	let beltColor = 'black';
 
     	const handleClick = () => {
-    		$$invalidate(0, beltColor = beltColor === 'black' ? 'white' : 'black');
+    		$$invalidate(0, beltColor = beltColor === 'black' ? 'magenta' : 'black');
     	};
 
     	const writable_props = [];
@@ -478,6 +511,11 @@ var app = (function () {
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
+
+    	function input_input_handler() {
+    		beltColor = this.value;
+    		$$invalidate(0, beltColor);
+    	}
 
     	$$self.$capture_state = () => ({ name, beltColor, handleClick });
 
@@ -490,7 +528,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [beltColor, name, handleClick];
+    	return [beltColor, name, handleClick, input_input_handler];
     }
 
     class App extends SvelteComponentDev {
