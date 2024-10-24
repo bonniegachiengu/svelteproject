@@ -27,12 +27,6 @@ var app = (function () {
     function is_empty(obj) {
         return Object.keys(obj).length === 0;
     }
-
-    const globals = (typeof window !== 'undefined'
-        ? window
-        : typeof globalThis !== 'undefined'
-            ? globalThis
-            : global);
     function append(target, node) {
         target.appendChild(node);
     }
@@ -66,8 +60,13 @@ var app = (function () {
     function children(element) {
         return Array.from(element.childNodes);
     }
-    function set_input_value(input, value) {
-        input.value = value == null ? '' : value;
+    function set_style(node, key, value, important) {
+        if (value == null) {
+            node.style.removeProperty(key);
+        }
+        else {
+            node.style.setProperty(key, value, important ? 'important' : '');
+        }
     }
     function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
         const e = document.createEvent('CustomEvent');
@@ -190,6 +189,99 @@ var app = (function () {
         if (block && block.i) {
             outroing.delete(block);
             block.i(local);
+        }
+    }
+
+    function destroy_block(block, lookup) {
+        block.d(1);
+        lookup.delete(block.key);
+    }
+    function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, lookup, node, destroy, create_each_block, next, get_context) {
+        let o = old_blocks.length;
+        let n = list.length;
+        let i = o;
+        const old_indexes = {};
+        while (i--)
+            old_indexes[old_blocks[i].key] = i;
+        const new_blocks = [];
+        const new_lookup = new Map();
+        const deltas = new Map();
+        const updates = [];
+        i = n;
+        while (i--) {
+            const child_ctx = get_context(ctx, list, i);
+            const key = get_key(child_ctx);
+            let block = lookup.get(key);
+            if (!block) {
+                block = create_each_block(key, child_ctx);
+                block.c();
+            }
+            else if (dynamic) {
+                // defer updates until all the DOM shuffling is done
+                updates.push(() => block.p(child_ctx, dirty));
+            }
+            new_lookup.set(key, new_blocks[i] = block);
+            if (key in old_indexes)
+                deltas.set(key, Math.abs(i - old_indexes[key]));
+        }
+        const will_move = new Set();
+        const did_move = new Set();
+        function insert(block) {
+            transition_in(block, 1);
+            block.m(node, next);
+            lookup.set(block.key, block);
+            next = block.first;
+            n--;
+        }
+        while (o && n) {
+            const new_block = new_blocks[n - 1];
+            const old_block = old_blocks[o - 1];
+            const new_key = new_block.key;
+            const old_key = old_block.key;
+            if (new_block === old_block) {
+                // do nothing
+                next = new_block.first;
+                o--;
+                n--;
+            }
+            else if (!new_lookup.has(old_key)) {
+                // remove old block
+                destroy(old_block, lookup);
+                o--;
+            }
+            else if (!lookup.has(new_key) || will_move.has(new_key)) {
+                insert(new_block);
+            }
+            else if (did_move.has(old_key)) {
+                o--;
+            }
+            else if (deltas.get(new_key) > deltas.get(old_key)) {
+                did_move.add(new_key);
+                insert(new_block);
+            }
+            else {
+                will_move.add(old_key);
+                o--;
+            }
+        }
+        while (o--) {
+            const old_block = old_blocks[o];
+            if (!new_lookup.has(old_block.key))
+                destroy(old_block, lookup);
+        }
+        while (n)
+            insert(new_blocks[n - 1]);
+        run_all(updates);
+        return new_blocks;
+    }
+    function validate_each_keys(ctx, list, get_context, get_key) {
+        const keys = new Set();
+        for (let i = 0; i < list.length; i++) {
+            const key = get_key(get_context(ctx, list, i));
+            if (keys.has(key)) {
+                throw new Error('Cannot have duplicate keys in a keyed each');
+            }
+            keys.add(key);
         }
     }
     function mount_component(component, target, anchor, customElement) {
@@ -369,6 +461,15 @@ var app = (function () {
         dispatch_dev('SvelteDOMSetData', { node: text, data });
         text.data = data;
     }
+    function validate_each_argument(arg) {
+        if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+            let msg = '{#each} only iterates over array-like objects.';
+            if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+                msg += ' You can use a spread to convert this iterable into an array.';
+            }
+            throw new Error(msg);
+        }
+    }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
             if (!~keys.indexOf(slot_key)) {
@@ -398,101 +499,233 @@ var app = (function () {
 
     /* src\App.svelte generated by Svelte v3.59.2 */
 
-    const { console: console_1 } = globals;
     const file = "src\\App.svelte";
 
-    function create_fragment(ctx) {
-    	let main;
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[3] = list[i];
+    	return child_ctx;
+    }
+
+    // (24:2) {:else}
+    function create_else_block(ctx) {
     	let p;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "No people to display...";
+    			attr_dev(p, "class", "svelte-hj27gg");
+    			add_location(p, file, 24, 2, 762);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(24:2) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (17:1) {#each people as person (person.id)}
+    function create_each_block(key_1, ctx) {
+    	let div;
+    	let h2;
+    	let t0_value = /*person*/ ctx[3].name + "";
     	let t0;
     	let t1;
+    	let p0;
+    	let t2_value = /*person*/ ctx[3].age + "";
     	let t2;
     	let t3;
     	let t4;
-    	let input0;
+    	let p1;
+    	let t5_value = /*person*/ ctx[3].beltColor + "";
     	let t5;
-    	let input1;
     	let t6;
-    	let input2;
+    	let t7;
+    	let button;
+    	let t9;
     	let mounted;
     	let dispose;
+
+    	function click_handler() {
+    		return /*click_handler*/ ctx[2](/*person*/ ctx[3]);
+    	}
+
+    	const block = {
+    		key: key_1,
+    		first: null,
+    		c: function create() {
+    			div = element("div");
+    			h2 = element("h2");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			p0 = element("p");
+    			t2 = text(t2_value);
+    			t3 = text(" years old");
+    			t4 = space();
+    			p1 = element("p");
+    			t5 = text(t5_value);
+    			t6 = text(" belt");
+    			t7 = space();
+    			button = element("button");
+    			button.textContent = "delete";
+    			t9 = space();
+    			attr_dev(h2, "class", "svelte-hj27gg");
+    			add_location(h2, file, 18, 3, 549);
+    			attr_dev(p0, "class", "svelte-hj27gg");
+    			add_location(p0, file, 19, 3, 575);
+    			set_style(p1, "color", /*person*/ ctx[3].beltColor);
+    			attr_dev(p1, "class", "svelte-hj27gg");
+    			add_location(p1, file, 20, 3, 608);
+    			attr_dev(button, "class", "svelte-hj27gg");
+    			add_location(button, file, 21, 3, 677);
+    			attr_dev(div, "class", "person svelte-hj27gg");
+    			add_location(div, file, 17, 2, 525);
+    			this.first = div;
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, h2);
+    			append_dev(h2, t0);
+    			append_dev(div, t1);
+    			append_dev(div, p0);
+    			append_dev(p0, t2);
+    			append_dev(p0, t3);
+    			append_dev(div, t4);
+    			append_dev(div, p1);
+    			append_dev(p1, t5);
+    			append_dev(p1, t6);
+    			append_dev(div, t7);
+    			append_dev(div, button);
+    			append_dev(div, t9);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", click_handler, false, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			if (dirty & /*people*/ 1 && t0_value !== (t0_value = /*person*/ ctx[3].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*people*/ 1 && t2_value !== (t2_value = /*person*/ ctx[3].age + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*people*/ 1 && t5_value !== (t5_value = /*person*/ ctx[3].beltColor + "")) set_data_dev(t5, t5_value);
+
+    			if (dirty & /*people*/ 1) {
+    				set_style(p1, "color", /*person*/ ctx[3].beltColor);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(17:1) {#each people as person (person.id)}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment(ctx) {
+    	let main;
+    	let each_blocks = [];
+    	let each_1_lookup = new Map();
+    	let each_value = /*people*/ ctx[0];
+    	validate_each_argument(each_value);
+    	const get_key = ctx => /*person*/ ctx[3].id;
+    	validate_each_keys(ctx, each_value, get_each_context, get_key);
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		let child_ctx = get_each_context(ctx, each_value, i);
+    		let key = get_key(child_ctx);
+    		each_1_lookup.set(key, each_blocks[i] = create_each_block(key, child_ctx));
+    	}
+
+    	let each_1_else = null;
+
+    	if (!each_value.length) {
+    		each_1_else = create_else_block(ctx);
+    	}
 
     	const block = {
     		c: function create() {
     			main = element("main");
-    			p = element("p");
-    			t0 = text(/*fullName*/ ctx[3]);
-    			t1 = text(" - ");
-    			t2 = text(/*beltColor*/ ctx[2]);
-    			t3 = text(" belt");
-    			t4 = space();
-    			input0 = element("input");
-    			t5 = space();
-    			input1 = element("input");
-    			t6 = space();
-    			input2 = element("input");
-    			add_location(p, file, 15, 1, 245);
-    			attr_dev(input0, "type", "text");
-    			add_location(input0, file, 16, 1, 283);
-    			attr_dev(input1, "type", "text");
-    			add_location(input1, file, 17, 1, 327);
-    			attr_dev(input2, "type", "text");
-    			add_location(input2, file, 18, 1, 370);
-    			attr_dev(main, "class", "svelte-1tky8bj");
-    			add_location(main, file, 14, 0, 237);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			if (each_1_else) {
+    				each_1_else.c();
+    			}
+
+    			attr_dev(main, "class", "svelte-hj27gg");
+    			add_location(main, file, 15, 0, 478);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
-    			append_dev(main, p);
-    			append_dev(p, t0);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, t3);
-    			append_dev(main, t4);
-    			append_dev(main, input0);
-    			set_input_value(input0, /*firstName*/ ctx[0]);
-    			append_dev(main, t5);
-    			append_dev(main, input1);
-    			set_input_value(input1, /*lastName*/ ctx[1]);
-    			append_dev(main, t6);
-    			append_dev(main, input2);
-    			set_input_value(input2, /*beltColor*/ ctx[2]);
 
-    			if (!mounted) {
-    				dispose = [
-    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[4]),
-    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[5]),
-    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[6])
-    				];
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				if (each_blocks[i]) {
+    					each_blocks[i].m(main, null);
+    				}
+    			}
 
-    				mounted = true;
+    			if (each_1_else) {
+    				each_1_else.m(main, null);
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*fullName*/ 8) set_data_dev(t0, /*fullName*/ ctx[3]);
-    			if (dirty & /*beltColor*/ 4) set_data_dev(t2, /*beltColor*/ ctx[2]);
+    			if (dirty & /*handleClick, people*/ 3) {
+    				each_value = /*people*/ ctx[0];
+    				validate_each_argument(each_value);
+    				validate_each_keys(ctx, each_value, get_each_context, get_key);
+    				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, main, destroy_block, create_each_block, null, get_each_context);
 
-    			if (dirty & /*firstName*/ 1 && input0.value !== /*firstName*/ ctx[0]) {
-    				set_input_value(input0, /*firstName*/ ctx[0]);
-    			}
-
-    			if (dirty & /*lastName*/ 2 && input1.value !== /*lastName*/ ctx[1]) {
-    				set_input_value(input1, /*lastName*/ ctx[1]);
-    			}
-
-    			if (dirty & /*beltColor*/ 4 && input2.value !== /*beltColor*/ ctx[2]) {
-    				set_input_value(input2, /*beltColor*/ ctx[2]);
+    				if (!each_value.length && each_1_else) {
+    					each_1_else.p(ctx, dirty);
+    				} else if (!each_value.length) {
+    					each_1_else = create_else_block(ctx);
+    					each_1_else.c();
+    					each_1_else.m(main, null);
+    				} else if (each_1_else) {
+    					each_1_else.d(1);
+    					each_1_else = null;
+    				}
     			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
-    			mounted = false;
-    			run_all(dispose);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].d();
+    			}
+
+    			if (each_1_else) each_1_else.d();
     		}
     	};
 
@@ -508,68 +741,59 @@ var app = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
-    	let fullName;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
-    	let firstName = 'Yoshi';
-    	let lastName = 'Kawasaki';
-    	let beltColor = 'black';
+
+    	let people = [
+    		{
+    			name: 'Bonnie Gachiengu',
+    			beltColor: 'orange',
+    			age: 30,
+    			id: 1
+    		},
+    		{
+    			name: 'Enzo Ferrari',
+    			beltColor: 'red',
+    			age: 45,
+    			id: 2
+    		},
+    		{
+    			name: 'Robert Einstein',
+    			beltColor: 'blue',
+    			age: 40,
+    			id: 3
+    		},
+    		{
+    			name: 'Neil deGrasse Tyson',
+    			beltColor: 'green',
+    			age: 60,
+    			id: 4
+    		}
+    	];
+
+    	const handleClick = id => {
+    		// remove the last person from the array people
+    		$$invalidate(0, people = people.filter(person => person.id !== id));
+    	};
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<App> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
-    	function input0_input_handler() {
-    		firstName = this.value;
-    		$$invalidate(0, firstName);
-    	}
-
-    	function input1_input_handler() {
-    		lastName = this.value;
-    		$$invalidate(1, lastName);
-    	}
-
-    	function input2_input_handler() {
-    		beltColor = this.value;
-    		$$invalidate(2, beltColor);
-    	}
-
-    	$$self.$capture_state = () => ({ firstName, lastName, beltColor, fullName });
+    	const click_handler = person => handleClick(person.id);
+    	$$self.$capture_state = () => ({ people, handleClick });
 
     	$$self.$inject_state = $$props => {
-    		if ('firstName' in $$props) $$invalidate(0, firstName = $$props.firstName);
-    		if ('lastName' in $$props) $$invalidate(1, lastName = $$props.lastName);
-    		if ('beltColor' in $$props) $$invalidate(2, beltColor = $$props.beltColor);
-    		if ('fullName' in $$props) $$invalidate(3, fullName = $$props.fullName);
+    		if ('people' in $$props) $$invalidate(0, people = $$props.people);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*firstName, lastName*/ 3) {
-    			$$invalidate(3, fullName = `${firstName} ${lastName}`);
-    		}
-
-    		if ($$self.$$.dirty & /*fullName, beltColor*/ 12) {
-    			{
-    				console.log(fullName);
-    				console.log(beltColor);
-    			}
-    		}
-    	};
-
-    	return [
-    		firstName,
-    		lastName,
-    		beltColor,
-    		fullName,
-    		input0_input_handler,
-    		input1_input_handler,
-    		input2_input_handler
-    	];
+    	return [people, handleClick, click_handler];
     }
 
     class App extends SvelteComponentDev {
