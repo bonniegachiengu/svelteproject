@@ -14,8 +14,8 @@
 		showModal = !showModal;
 	}
 
-	const handleClick = (id) => {
-		// remove the last person from the array people
+	// Delete a person when the button is clicked
+	const handleDelete = (id) => {
 		people = people.filter(person => person.id !== id);
 	}
 
@@ -24,11 +24,19 @@
 </script>
 
 <!--Component - Modal-->
-<Modal message = "Hey I am a prop value" {showModal} on:click={toggleModal}/>
+<Modal {showModal} on:click={toggleModal}>
+	<form>
+		<input type="text" placeholder="name" id="name" name="name">
+		<input type="number" placeholder="age" id="age" name="age">
+		<input type="text" placeholder="belt color" id="beltColor" name="beltColor">
+		<button class="btn" type="submit">Add Person</button>
+	</form>
+	<h2 slot="title">Add a New Person</h2>
+</Modal>
 
 <!--Component - Main content-->
 <main>
-	<button class="btn" on:click|once={toggleModal}>Toggle Modal</button>
+	<button class="btn" on:click={toggleModal}>Toggle Modal</button>
 	{#each people as person (person.id)}
 		<div class="person">
 			<h2>{person.name}</h2>
@@ -38,7 +46,7 @@
 			{/if}
 			<p>{person.age} years old</p>
 			<p style="color: {person.beltColor};">{person.beltColor} belt</p>
-			<button class="btn" on:click={handleClick}>delete</button>
+			<button class="btn" on:click={() => handleDelete(person.id)}>Delete Person</button>
 		</div>
 		{:else}
 		<p>No people to display...</p>

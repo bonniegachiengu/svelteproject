@@ -7,8 +7,6 @@
     // capture - the event will be dispatched to the handler before it reaches the target element
     // stopPropagation - stops the event from propagating further (e.g. from a child to a parent element)
     
-
-    export let message = "default message";
     export let showModal = false;
     export let dontDelete = false;
 </script>
@@ -17,7 +15,8 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="backdrop" class:delete={dontDelete} on:click|self>
         <div class="modal">
-            <p>{message}</p>
+            <slot name="title"></slot>
+            <slot></slot>
         </div>
     </div>
 {/if}
