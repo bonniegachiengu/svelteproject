@@ -1,4 +1,13 @@
 <script>
+    // Some Event modifiers;
+    // once - the event listener will be removed after the first time it runs (useful for things like alerts i.e. removes handler)
+    // preventDefault - prevents the default behavior of the event (e.g. form submission or link navigation) for intance run e.preventDefault() in the handler
+    // self - only trigger the handler if the event was dispatched on the element itself, not from a descendant
+    // passive - indicates that the handler will never call preventDefault() on the event
+    // capture - the event will be dispatched to the handler before it reaches the target element
+    // stopPropagation - stops the event from propagating further (e.g. from a child to a parent element)
+    
+
     export let message = "default message";
     export let showModal = false;
     export let dontDelete = false;
@@ -6,7 +15,7 @@
 
 {#if showModal}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="backdrop" class:delete={dontDelete} on:click>
+    <div class="backdrop" class:delete={dontDelete} on:click|self>
         <div class="modal">
             <p>{message}</p>
         </div>

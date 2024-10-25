@@ -54,6 +54,13 @@ var app = (function () {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
     }
+    function self(fn) {
+        return function (event) {
+            // @ts-ignore
+            if (event.target === this)
+                fn.call(this, event);
+        };
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -540,7 +547,7 @@ var app = (function () {
 
     const file$1 = "src\\Modal.svelte";
 
-    // (7:0) {#if showModal}
+    // (16:0) {#if showModal}
     function create_if_block$1(ctx) {
     	let div1;
     	let div0;
@@ -555,12 +562,12 @@ var app = (function () {
     			div0 = element("div");
     			p = element("p");
     			t = text(/*message*/ ctx[0]);
-    			add_location(p, file$1, 10, 12, 322);
+    			add_location(p, file$1, 19, 12, 1067);
     			attr_dev(div0, "class", "modal svelte-zn9thw");
-    			add_location(div0, file$1, 9, 8, 289);
+    			add_location(div0, file$1, 18, 8, 1034);
     			attr_dev(div1, "class", "backdrop svelte-zn9thw");
     			toggle_class(div1, "delete", /*dontDelete*/ ctx[2]);
-    			add_location(div1, file$1, 8, 4, 222);
+    			add_location(div1, file$1, 17, 4, 962);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -569,7 +576,7 @@ var app = (function () {
     			append_dev(p, t);
 
     			if (!mounted) {
-    				dispose = listen_dev(div1, "click", /*click_handler*/ ctx[3], false, false, false, false);
+    				dispose = listen_dev(div1, "click", self(/*click_handler*/ ctx[3]), false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -591,7 +598,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(7:0) {#if showModal}",
+    		source: "(16:0) {#if showModal}",
     		ctx
     	});
 
@@ -739,7 +746,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "No people to display...";
-    			add_location(p, file, 43, 2, 1146);
+    			add_location(p, file, 43, 2, 1151);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -771,8 +778,8 @@ var app = (function () {
     			p = element("p");
     			strong = element("strong");
     			strong.textContent = "MASTER NINJA";
-    			add_location(strong, file, 36, 7, 918);
-    			add_location(p, file, 36, 4, 915);
+    			add_location(strong, file, 36, 7, 923);
+    			add_location(p, file, 36, 4, 920);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -839,14 +846,14 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "delete";
     			t10 = space();
-    			add_location(h2, file, 33, 3, 820);
-    			add_location(p0, file, 38, 3, 964);
+    			add_location(h2, file, 33, 3, 825);
+    			add_location(p0, file, 38, 3, 969);
     			set_style(p1, "color", /*person*/ ctx[5].beltColor);
-    			add_location(p1, file, 39, 3, 997);
+    			add_location(p1, file, 39, 3, 1002);
     			attr_dev(button, "class", "btn");
-    			add_location(button, file, 40, 3, 1066);
+    			add_location(button, file, 40, 3, 1071);
     			attr_dev(div, "class", "person svelte-13banvt");
-    			add_location(div, file, 32, 2, 796);
+    			add_location(div, file, 32, 2, 801);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -996,7 +1003,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*toggleModal*/ ctx[2], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*toggleModal*/ ctx[2], { once: true }, false, false, false);
     				mounted = true;
     			}
     		},
