@@ -28,7 +28,7 @@
 {/if} -->
 
 <!--Component - Modal-->
-<Modal />
+<Modal message = "Hey I am a prop value" isPromo = {true}/>
 
 <!--Component - Main content-->
 <main>

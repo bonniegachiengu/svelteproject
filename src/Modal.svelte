@@ -1,15 +1,16 @@
 <script>
+    export let message = "default message";
     let showModal = true;
-    let dontDelete = true;
+    export let dontDelete = true;
 </script>
 
 {#if showModal}
     <div class="backdrop" class:delete={dontDelete}>
         <div class="modal">
             <h2>Are you sure?</h2>
-            <p>Do you want to delete this person?</p>
-            <button class="btn btn--alt">cancel</button>
-            <button class="btn">confirm</button>
+            <p>{message}</p>
+            <button class="btn" on:click={() => dontDelete = false}>Yes, delete</button>
+            <button class="btn btn--alt" on:click={() => showModal = false}>No, cancel</button>
         </div>
     </div>
 {/if}
@@ -55,7 +56,7 @@
     }
 
     .delete .modal {
-        background: crimson;
+        background: rgb(254, 206, 228);
         color: white;
     }
     

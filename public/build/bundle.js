@@ -530,17 +530,20 @@ var app = (function () {
 
     const file$1 = "src\\Modal.svelte";
 
-    // (6:0) {#if showModal}
+    // (7:0) {#if showModal}
     function create_if_block$1(ctx) {
     	let div1;
     	let div0;
     	let h2;
     	let t1;
     	let p;
+    	let t2;
     	let t3;
     	let button0;
     	let t5;
     	let button1;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
@@ -550,24 +553,24 @@ var app = (function () {
     			h2.textContent = "Are you sure?";
     			t1 = space();
     			p = element("p");
-    			p.textContent = "Do you want to delete this person?";
+    			t2 = text(/*message*/ ctx[1]);
     			t3 = space();
     			button0 = element("button");
-    			button0.textContent = "cancel";
+    			button0.textContent = "Yes, delete";
     			t5 = space();
     			button1 = element("button");
-    			button1.textContent = "confirm";
-    			add_location(h2, file$1, 8, 12, 190);
-    			add_location(p, file$1, 9, 12, 226);
-    			attr_dev(button0, "class", "btn btn--alt svelte-ndhypv");
-    			add_location(button0, file$1, 10, 12, 281);
-    			attr_dev(button1, "class", "btn svelte-ndhypv");
-    			add_location(button1, file$1, 11, 12, 339);
-    			attr_dev(div0, "class", "modal svelte-ndhypv");
-    			add_location(div0, file$1, 7, 8, 157);
-    			attr_dev(div1, "class", "backdrop svelte-ndhypv");
-    			toggle_class(div1, "delete", /*dontDelete*/ ctx[1]);
-    			add_location(div1, file$1, 6, 4, 99);
+    			button1.textContent = "No, cancel";
+    			add_location(h2, file$1, 9, 12, 242);
+    			add_location(p, file$1, 10, 12, 278);
+    			attr_dev(button0, "class", "btn svelte-1popkr");
+    			add_location(button0, file$1, 11, 12, 308);
+    			attr_dev(button1, "class", "btn btn--alt svelte-1popkr");
+    			add_location(button1, file$1, 12, 12, 398);
+    			attr_dev(div0, "class", "modal svelte-1popkr");
+    			add_location(div0, file$1, 8, 8, 209);
+    			attr_dev(div1, "class", "backdrop svelte-1popkr");
+    			toggle_class(div1, "delete", /*dontDelete*/ ctx[0]);
+    			add_location(div1, file$1, 7, 4, 151);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -575,14 +578,32 @@ var app = (function () {
     			append_dev(div0, h2);
     			append_dev(div0, t1);
     			append_dev(div0, p);
+    			append_dev(p, t2);
     			append_dev(div0, t3);
     			append_dev(div0, button0);
     			append_dev(div0, t5);
     			append_dev(div0, button1);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(button0, "click", /*click_handler*/ ctx[3], false, false, false, false),
+    					listen_dev(button1, "click", /*click_handler_1*/ ctx[4], false, false, false, false)
+    				];
+
+    				mounted = true;
+    			}
     		},
-    		p: noop,
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*message*/ 2) set_data_dev(t2, /*message*/ ctx[1]);
+
+    			if (dirty & /*dontDelete*/ 1) {
+    				toggle_class(div1, "delete", /*dontDelete*/ ctx[0]);
+    			}
+    		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
+    			mounted = false;
+    			run_all(dispose);
     		}
     	};
 
@@ -590,7 +611,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(6:0) {#if showModal}",
+    		source: "(7:0) {#if showModal}",
     		ctx
     	});
 
@@ -599,7 +620,7 @@ var app = (function () {
 
     function create_fragment$1(ctx) {
     	let if_block_anchor;
-    	let if_block = /*showModal*/ ctx[0] && create_if_block$1(ctx);
+    	let if_block = /*showModal*/ ctx[2] && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -614,7 +635,18 @@ var app = (function () {
     			insert_dev(target, if_block_anchor, anchor);
     		},
     		p: function update(ctx, [dirty]) {
-    			if (/*showModal*/ ctx[0]) if_block.p(ctx, dirty);
+    			if (/*showModal*/ ctx[2]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$1(ctx);
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
     		},
     		i: noop,
     		o: noop,
@@ -638,32 +670,42 @@ var app = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Modal', slots, []);
+    	let { message = "default message" } = $$props;
     	let showModal = true;
-    	let dontDelete = true;
-    	const writable_props = [];
+    	let { dontDelete = true } = $$props;
+    	const writable_props = ['message', 'dontDelete'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Modal> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ showModal, dontDelete });
+    	const click_handler = () => $$invalidate(0, dontDelete = false);
+    	const click_handler_1 = () => $$invalidate(2, showModal = false);
+
+    	$$self.$$set = $$props => {
+    		if ('message' in $$props) $$invalidate(1, message = $$props.message);
+    		if ('dontDelete' in $$props) $$invalidate(0, dontDelete = $$props.dontDelete);
+    	};
+
+    	$$self.$capture_state = () => ({ message, showModal, dontDelete });
 
     	$$self.$inject_state = $$props => {
-    		if ('showModal' in $$props) $$invalidate(0, showModal = $$props.showModal);
-    		if ('dontDelete' in $$props) $$invalidate(1, dontDelete = $$props.dontDelete);
+    		if ('message' in $$props) $$invalidate(1, message = $$props.message);
+    		if ('showModal' in $$props) $$invalidate(2, showModal = $$props.showModal);
+    		if ('dontDelete' in $$props) $$invalidate(0, dontDelete = $$props.dontDelete);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [showModal, dontDelete];
+    	return [dontDelete, message, showModal, click_handler, click_handler_1];
     }
 
     class Modal extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { message: 1, dontDelete: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -671,6 +713,22 @@ var app = (function () {
     			options,
     			id: create_fragment$1.name
     		});
+    	}
+
+    	get message() {
+    		throw new Error("<Modal>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set message(value) {
+    		throw new Error("<Modal>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get dontDelete() {
+    		throw new Error("<Modal>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set dontDelete(value) {
+    		throw new Error("<Modal>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -691,7 +749,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "No people to display...";
-    			add_location(p, file, 46, 2, 1175);
+    			add_location(p, file, 46, 2, 1225);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -723,8 +781,8 @@ var app = (function () {
     			p = element("p");
     			strong = element("strong");
     			strong.textContent = "MASTER NINJA";
-    			add_location(strong, file, 39, 7, 930);
-    			add_location(p, file, 39, 4, 927);
+    			add_location(strong, file, 39, 7, 980);
+    			add_location(p, file, 39, 4, 977);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -795,14 +853,14 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "delete";
     			t10 = space();
-    			add_location(h2, file, 36, 3, 832);
-    			add_location(p0, file, 41, 3, 976);
+    			add_location(h2, file, 36, 3, 882);
+    			add_location(p0, file, 41, 3, 1026);
     			set_style(p1, "color", /*person*/ ctx[4].beltColor);
-    			add_location(p1, file, 42, 3, 1009);
+    			add_location(p1, file, 42, 3, 1059);
     			attr_dev(button, "class", "btn");
-    			add_location(button, file, 43, 3, 1078);
+    			add_location(button, file, 43, 3, 1128);
     			attr_dev(div, "class", "person svelte-13banvt");
-    			add_location(div, file, 35, 2, 808);
+    			add_location(div, file, 35, 2, 858);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -876,7 +934,15 @@ var app = (function () {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let current;
-    	modal = new Modal({ $$inline: true });
+
+    	modal = new Modal({
+    			props: {
+    				message: "Hey I am a prop value",
+    				isPromo: true
+    			},
+    			$$inline: true
+    		});
+
     	let each_value = /*people*/ ctx[0];
     	validate_each_argument(each_value);
     	const get_key = ctx => /*person*/ ctx[4].id;
@@ -909,7 +975,7 @@ var app = (function () {
     			}
 
     			attr_dev(main, "class", "svelte-13banvt");
-    			add_location(main, file, 33, 0, 761);
+    			add_location(main, file, 33, 0, 811);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
