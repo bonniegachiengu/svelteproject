@@ -71,6 +71,9 @@ var app = (function () {
             node.style.setProperty(key, value, important ? 'important' : '');
         }
     }
+    function toggle_class(element, name, toggle) {
+        element.classList[toggle ? 'add' : 'remove'](name);
+    }
     function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
         const e = document.createEvent('CustomEvent');
         e.initCustomEvent(type, bubbles, cancelable, detail);
@@ -527,7 +530,7 @@ var app = (function () {
 
     const file$1 = "src\\Modal.svelte";
 
-    // (5:0) {#if showModal}
+    // (6:0) {#if showModal}
     function create_if_block$1(ctx) {
     	let div1;
     	let div0;
@@ -554,17 +557,17 @@ var app = (function () {
     			t5 = space();
     			button1 = element("button");
     			button1.textContent = "confirm";
-    			add_location(h2, file$1, 7, 12, 137);
-    			attr_dev(p, "class", "svelte-jqynv8");
-    			add_location(p, file$1, 8, 12, 173);
-    			attr_dev(button0, "class", "btn btn--alt svelte-jqynv8");
-    			add_location(button0, file$1, 9, 12, 228);
-    			attr_dev(button1, "class", "btn svelte-jqynv8");
-    			add_location(button1, file$1, 10, 12, 286);
-    			attr_dev(div0, "class", "modal");
-    			add_location(div0, file$1, 6, 8, 104);
-    			attr_dev(div1, "class", "backdrop");
-    			add_location(div1, file$1, 5, 4, 72);
+    			add_location(h2, file$1, 8, 12, 190);
+    			add_location(p, file$1, 9, 12, 226);
+    			attr_dev(button0, "class", "btn btn--alt svelte-ndhypv");
+    			add_location(button0, file$1, 10, 12, 281);
+    			attr_dev(button1, "class", "btn svelte-ndhypv");
+    			add_location(button1, file$1, 11, 12, 339);
+    			attr_dev(div0, "class", "modal svelte-ndhypv");
+    			add_location(div0, file$1, 7, 8, 157);
+    			attr_dev(div1, "class", "backdrop svelte-ndhypv");
+    			toggle_class(div1, "delete", /*dontDelete*/ ctx[1]);
+    			add_location(div1, file$1, 6, 4, 99);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -577,6 +580,7 @@ var app = (function () {
     			append_dev(div0, t5);
     			append_dev(div0, button1);
     		},
+    		p: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
     		}
@@ -586,7 +590,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(5:0) {#if showModal}",
+    		source: "(6:0) {#if showModal}",
     		ctx
     	});
 
@@ -609,7 +613,9 @@ var app = (function () {
     			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (/*showModal*/ ctx[0]) if_block.p(ctx, dirty);
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
@@ -632,24 +638,26 @@ var app = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Modal', slots, []);
-    	let showModal = false;
+    	let showModal = true;
+    	let dontDelete = true;
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Modal> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ showModal });
+    	$$self.$capture_state = () => ({ showModal, dontDelete });
 
     	$$self.$inject_state = $$props => {
     		if ('showModal' in $$props) $$invalidate(0, showModal = $$props.showModal);
+    		if ('dontDelete' in $$props) $$invalidate(1, dontDelete = $$props.dontDelete);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [showModal];
+    	return [showModal, dontDelete];
     }
 
     class Modal extends SvelteComponentDev {
@@ -683,7 +691,6 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "No people to display...";
-    			attr_dev(p, "class", "svelte-rtpnfh");
     			add_location(p, file, 46, 2, 1175);
     		},
     		m: function mount(target, anchor) {
@@ -716,9 +723,7 @@ var app = (function () {
     			p = element("p");
     			strong = element("strong");
     			strong.textContent = "MASTER NINJA";
-    			attr_dev(strong, "class", "svelte-rtpnfh");
     			add_location(strong, file, 39, 7, 930);
-    			attr_dev(p, "class", "svelte-rtpnfh");
     			add_location(p, file, 39, 4, 927);
     		},
     		m: function mount(target, anchor) {
@@ -790,16 +795,13 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "delete";
     			t10 = space();
-    			attr_dev(h2, "class", "svelte-rtpnfh");
     			add_location(h2, file, 36, 3, 832);
-    			attr_dev(p0, "class", "svelte-rtpnfh");
     			add_location(p0, file, 41, 3, 976);
     			set_style(p1, "color", /*person*/ ctx[4].beltColor);
-    			attr_dev(p1, "class", "svelte-rtpnfh");
     			add_location(p1, file, 42, 3, 1009);
-    			attr_dev(button, "class", "btn svelte-rtpnfh");
+    			attr_dev(button, "class", "btn");
     			add_location(button, file, 43, 3, 1078);
-    			attr_dev(div, "class", "person svelte-rtpnfh");
+    			attr_dev(div, "class", "person svelte-13banvt");
     			add_location(div, file, 35, 2, 808);
     			this.first = div;
     		},
@@ -906,7 +908,7 @@ var app = (function () {
     				each_1_else.c();
     			}
 
-    			attr_dev(main, "class", "svelte-rtpnfh");
+    			attr_dev(main, "class", "svelte-13banvt");
     			add_location(main, file, 33, 0, 761);
     		},
     		l: function claim(nodes) {

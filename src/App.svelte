@@ -49,57 +49,9 @@
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 0.5em;
-		max-width: 240px;
-		margin: 0 auto;
-		background-color: antiquewhite;
-	}
-
-	main h2 {
-		color: #afafaf;
-		font-family: "EB Garamond", serif;
-		font-size: 2em;
-		font-weight: 700;
-	}
-
-	main strong {
-		color: #000;
-		font-weight: 800;
-	}
-
-	main p {
-		color: #4a4848;
-		font-family: "Nunito Sans", sans-serif;
-		font-size: 1.5;
-		font-weight: 700;
-	}
-
 	.person {
 		padding: 0.2em;
 		margin: 0.2em 0;
-	}
-
-	.btn {
-		background-color: #f43675;
-		border: none;
-		color: white;
-		padding: 0.5em 1em;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 1em;
-		margin: 0.2em 0;
-		cursor: pointer;
-	}
-
-	.btn:hover {
-		background-color: #d32f5d;
-	}
-
-	.btn:active {
-		background-color: #ff407f;
 	}
 
 

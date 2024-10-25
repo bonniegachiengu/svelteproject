@@ -9,7 +9,7 @@ body {
 	margin: 0;
 	padding: 8px;
 	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: "Nunito Sans", sans-serif;
 }
 
 a {
@@ -60,4 +60,67 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
+}
+
+/* exrta styles */
+
+body {
+	text-align: center;
+	padding: 0.5em;
+	max-width: 240px;
+	margin: 0 auto;
+	background: antiquewhite;
+}
+
+h2 {
+	color: #afafaf;
+	font-family: "EB Garamond", serif;
+	font-size: 2em;
+	font-weight: 700;
+}
+
+strong {
+	color: #000;
+	font-weight: 800;
+}
+
+p {
+	color: #4a4848;
+	font-family: "Nunito Sans", sans-serif;
+	font-size: 1.5;
+	font-weight: 700;
+}
+
+.btn {
+	background-color: #f43675;
+	border: none;
+	color: white;
+	padding: 0.5em 1em;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1em;
+	margin: 0.2em 0;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background-color: #d32f5d;
+}
+
+.btn:active {
+	background-color: #ff407f;
+}
+
+.btn--alt {
+	background-color: #f4f4f4;
+	color: #f43675;
+}
+
+.btn--alt:hover {
+	background-color: #dcdcdc;
+}
+
+.btn--alt:active {
+	background-color: #f4f4f4;
 }

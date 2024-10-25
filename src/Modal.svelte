@@ -1,9 +1,10 @@
 <script>
-    let showModal = false;
+    let showModal = true;
+    let dontDelete = true;
 </script>
 
 {#if showModal}
-    <div class="backdrop">
+    <div class="backdrop" class:delete={dontDelete}>
         <div class="modal">
             <h2>Are you sure?</h2>
             <p>Do you want to delete this person?</p>
@@ -14,48 +15,48 @@
 {/if}
 
 <style>
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-    p {
-		color: #4a4848;
-		font-family: "Nunito Sans", sans-serif;
-		font-size: 1.5;
-		font-weight: 700;
-	}
+    .modal {
+        width: 90%;
+        max-width: 40rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+        padding: 1rem;
+        text-align: center;
+    }
 
     .btn {
-            background-color: #f43675;
-            border: none;
-            color: white;
-            padding: 0.5em 1em;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 1em;
-            margin: 0.2em 0;
-            cursor: pointer;
-        }
+        font: inherit;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        padding: 0.25rem 1rem;
+        background: #ff2050;
+        color: white;
+        border-radius: 6px;
+    }
 
     .btn--alt {
-        background-color: #f4f4f4;
-        color: #f43675;
+        background: #f1f1f1;
+        color: #333;
+        border: 1px solid #ccc;
+    }
+
+    .delete .modal {
+        background: crimson;
+        color: white;
     }
     
-    .btn:hover {
-		background-color: #d32f5d;
-	}
-
-	.btn:active {
-		background-color: #ff407f;
-	}
-
-    .btn--alt:hover {
-        background-color: #a3a0a1;
-        color: #ffffff;
-    }
-
-    .btn--alt:active {
-        background-color: #f4f4f4;
-        color: #f43675;
-    }
-
 </style>
