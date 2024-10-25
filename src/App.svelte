@@ -1,6 +1,7 @@
 <script>
 	// import the Modal component
 	import Modal from './Modal.svelte';
+	import AddPersonForm from './AddPersonForm.svelte';
 
 	let showModal = false;
 
@@ -19,19 +20,11 @@
 		people = people.filter(person => person.id !== id);
 	}
 
-	let num = 20;
-
 </script>
 
 <!--Component - Modal-->
 <Modal {showModal} on:click={toggleModal}>
-	<form>
-		<input type="text" placeholder="name" id="name" name="name">
-		<input type="number" placeholder="age" id="age" name="age">
-		<input type="text" placeholder="belt color" id="beltColor" name="beltColor">
-		<button class="btn" type="submit">Add Person</button>
-	</form>
-	<h2 slot="title">Add a New Person</h2>
+	<AddPersonForm />
 </Modal>
 
 <!--Component - Main content-->

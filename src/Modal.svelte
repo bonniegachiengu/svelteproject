@@ -15,7 +15,6 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="backdrop" class:delete={dontDelete} on:click|self>
         <div class="modal">
-            <slot name="title"></slot>
             <slot></slot>
         </div>
     </div>
