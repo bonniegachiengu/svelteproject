@@ -503,11 +503,98 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[3] = list[i];
+    	child_ctx[4] = list[i];
     	return child_ctx;
     }
 
-    // (24:2) {:else}
+    // (23:0) {:else}
+    function create_else_block_1(ctx) {
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "Number is 4";
+    			add_location(p, file, 23, 1, 589);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(23:0) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (21:18) 
+    function create_if_block_2(ctx) {
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "Number is less than 4";
+    			add_location(p, file, 21, 1, 551);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(21:18) ",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (19:0) {#if num > 4}
+    function create_if_block_1(ctx) {
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "Number is greater than 4";
+    			add_location(p, file, 19, 1, 499);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(19:0) {#if num > 4}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (40:2) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -515,8 +602,8 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "No people to display...";
-    			attr_dev(p, "class", "svelte-hj27gg");
-    			add_location(p, file, 24, 2, 762);
+    			attr_dev(p, "class", "svelte-rw4lv7");
+    			add_location(p, file, 40, 2, 1050);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -531,37 +618,74 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(24:2) {:else}",
+    		source: "(40:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (17:1) {#each people as person (person.id)}
+    // (33:3) {#if person.beltColor === 'black'}
+    function create_if_block(ctx) {
+    	let p;
+    	let strong;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "MASTER NINJA";
+    			attr_dev(strong, "class", "svelte-rw4lv7");
+    			add_location(strong, file, 33, 7, 817);
+    			attr_dev(p, "class", "svelte-rw4lv7");
+    			add_location(p, file, 33, 4, 814);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(33:3) {#if person.beltColor === 'black'}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (29:1) {#each people as person (person.id)}
     function create_each_block(key_1, ctx) {
     	let div;
     	let h2;
-    	let t0_value = /*person*/ ctx[3].name + "";
+    	let t0_value = /*person*/ ctx[4].name + "";
     	let t0;
     	let t1;
-    	let p0;
-    	let t2_value = /*person*/ ctx[3].age + "";
     	let t2;
+    	let p0;
+    	let t3_value = /*person*/ ctx[4].age + "";
     	let t3;
     	let t4;
-    	let p1;
-    	let t5_value = /*person*/ ctx[3].beltColor + "";
     	let t5;
+    	let p1;
+    	let t6_value = /*person*/ ctx[4].beltColor + "";
     	let t6;
     	let t7;
+    	let t8;
     	let button;
-    	let t9;
+    	let t10;
     	let mounted;
     	let dispose;
+    	let if_block = /*person*/ ctx[4].beltColor === 'black' && create_if_block(ctx);
 
     	function click_handler() {
-    		return /*click_handler*/ ctx[2](/*person*/ ctx[3]);
+    		return /*click_handler*/ ctx[3](/*person*/ ctx[4]);
     	}
 
     	const block = {
@@ -571,29 +695,31 @@ var app = (function () {
     			div = element("div");
     			h2 = element("h2");
     			t0 = text(t0_value);
-    			t1 = space();
+    			t1 = text("\n\t\t\t>\n\t\t\t");
+    			if (if_block) if_block.c();
+    			t2 = space();
     			p0 = element("p");
-    			t2 = text(t2_value);
-    			t3 = text(" years old");
-    			t4 = space();
+    			t3 = text(t3_value);
+    			t4 = text(" years old");
+    			t5 = space();
     			p1 = element("p");
-    			t5 = text(t5_value);
-    			t6 = text(" belt");
-    			t7 = space();
+    			t6 = text(t6_value);
+    			t7 = text(" belt");
+    			t8 = space();
     			button = element("button");
     			button.textContent = "delete";
-    			t9 = space();
-    			attr_dev(h2, "class", "svelte-hj27gg");
-    			add_location(h2, file, 18, 3, 549);
-    			attr_dev(p0, "class", "svelte-hj27gg");
-    			add_location(p0, file, 19, 3, 575);
-    			set_style(p1, "color", /*person*/ ctx[3].beltColor);
-    			attr_dev(p1, "class", "svelte-hj27gg");
-    			add_location(p1, file, 20, 3, 608);
-    			attr_dev(button, "class", "svelte-hj27gg");
-    			add_location(button, file, 21, 3, 677);
-    			attr_dev(div, "class", "person svelte-hj27gg");
-    			add_location(div, file, 17, 2, 525);
+    			t10 = space();
+    			attr_dev(h2, "class", "svelte-rw4lv7");
+    			add_location(h2, file, 30, 3, 718);
+    			attr_dev(p0, "class", "svelte-rw4lv7");
+    			add_location(p0, file, 35, 3, 863);
+    			set_style(p1, "color", /*person*/ ctx[4].beltColor);
+    			attr_dev(p1, "class", "svelte-rw4lv7");
+    			add_location(p1, file, 36, 3, 896);
+    			attr_dev(button, "class", "svelte-rw4lv7");
+    			add_location(button, file, 37, 3, 965);
+    			attr_dev(div, "class", "person svelte-rw4lv7");
+    			add_location(div, file, 29, 2, 694);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -601,16 +727,18 @@ var app = (function () {
     			append_dev(div, h2);
     			append_dev(h2, t0);
     			append_dev(div, t1);
+    			if (if_block) if_block.m(div, null);
+    			append_dev(div, t2);
     			append_dev(div, p0);
-    			append_dev(p0, t2);
     			append_dev(p0, t3);
-    			append_dev(div, t4);
+    			append_dev(p0, t4);
+    			append_dev(div, t5);
     			append_dev(div, p1);
-    			append_dev(p1, t5);
     			append_dev(p1, t6);
-    			append_dev(div, t7);
+    			append_dev(p1, t7);
+    			append_dev(div, t8);
     			append_dev(div, button);
-    			append_dev(div, t9);
+    			append_dev(div, t10);
 
     			if (!mounted) {
     				dispose = listen_dev(button, "click", click_handler, false, false, false, false);
@@ -619,16 +747,29 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*people*/ 1 && t0_value !== (t0_value = /*person*/ ctx[3].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*people*/ 1 && t2_value !== (t2_value = /*person*/ ctx[3].age + "")) set_data_dev(t2, t2_value);
-    			if (dirty & /*people*/ 1 && t5_value !== (t5_value = /*person*/ ctx[3].beltColor + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*people*/ 1 && t0_value !== (t0_value = /*person*/ ctx[4].name + "")) set_data_dev(t0, t0_value);
+
+    			if (/*person*/ ctx[4].beltColor === 'black') {
+    				if (if_block) ; else {
+    					if_block = create_if_block(ctx);
+    					if_block.c();
+    					if_block.m(div, t2);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
+    			if (dirty & /*people*/ 1 && t3_value !== (t3_value = /*person*/ ctx[4].age + "")) set_data_dev(t3, t3_value);
+    			if (dirty & /*people*/ 1 && t6_value !== (t6_value = /*person*/ ctx[4].beltColor + "")) set_data_dev(t6, t6_value);
 
     			if (dirty & /*people*/ 1) {
-    				set_style(p1, "color", /*person*/ ctx[3].beltColor);
+    				set_style(p1, "color", /*person*/ ctx[4].beltColor);
     			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
+    			if (if_block) if_block.d();
     			mounted = false;
     			dispose();
     		}
@@ -638,7 +779,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(17:1) {#each people as person (person.id)}",
+    		source: "(29:1) {#each people as person (person.id)}",
     		ctx
     	});
 
@@ -646,12 +787,22 @@ var app = (function () {
     }
 
     function create_fragment(ctx) {
+    	let t;
     	let main;
     	let each_blocks = [];
     	let each_1_lookup = new Map();
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*num*/ ctx[2] > 4) return create_if_block_1;
+    		if (/*num*/ ctx[2] < 4) return create_if_block_2;
+    		return create_else_block_1;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
     	let each_value = /*people*/ ctx[0];
     	validate_each_argument(each_value);
-    	const get_key = ctx => /*person*/ ctx[3].id;
+    	const get_key = ctx => /*person*/ ctx[4].id;
     	validate_each_keys(ctx, each_value, get_each_context, get_key);
 
     	for (let i = 0; i < each_value.length; i += 1) {
@@ -668,6 +819,8 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			if_block.c();
+    			t = space();
     			main = element("main");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -678,13 +831,15 @@ var app = (function () {
     				each_1_else.c();
     			}
 
-    			attr_dev(main, "class", "svelte-hj27gg");
-    			add_location(main, file, 15, 0, 478);
+    			attr_dev(main, "class", "svelte-rw4lv7");
+    			add_location(main, file, 27, 0, 647);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
+    			if_block.m(target, anchor);
+    			insert_dev(target, t, anchor);
     			insert_dev(target, main, anchor);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -719,6 +874,8 @@ var app = (function () {
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
+    			if_block.d(detaching);
+    			if (detaching) detach_dev(t);
     			if (detaching) detach_dev(main);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -759,7 +916,7 @@ var app = (function () {
     		},
     		{
     			name: 'Robert Einstein',
-    			beltColor: 'blue',
+    			beltColor: 'black',
     			age: 40,
     			id: 3
     		},
@@ -776,6 +933,7 @@ var app = (function () {
     		$$invalidate(0, people = people.filter(person => person.id !== id));
     	};
 
+    	let num = 20;
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -783,17 +941,18 @@ var app = (function () {
     	});
 
     	const click_handler = person => handleClick(person.id);
-    	$$self.$capture_state = () => ({ people, handleClick });
+    	$$self.$capture_state = () => ({ people, handleClick, num });
 
     	$$self.$inject_state = $$props => {
     		if ('people' in $$props) $$invalidate(0, people = $$props.people);
+    		if ('num' in $$props) $$invalidate(2, num = $$props.num);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [people, handleClick, click_handler];
+    	return [people, handleClick, num, click_handler];
     }
 
     class App extends SvelteComponentDev {

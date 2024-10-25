@@ -2,7 +2,7 @@
 	let people = [
 		{ name: 'Bonnie Gachiengu', beltColor: 'orange', age: 30, id: 1 },
 		{ name: 'Enzo Ferrari', beltColor: 'red', age: 45, id: 2 },
-		{ name: 'Robert Einstein', beltColor: 'blue', age: 40, id: 3 },
+		{ name: 'Robert Einstein', beltColor: 'black', age: 40, id: 3 },
 		{ name: 'Neil deGrasse Tyson', beltColor: 'green', age: 60, id: 4 }
 	];
 
@@ -10,13 +10,29 @@
 		// remove the last person from the array people
 		people = people.filter(person => person.id !== id);
 	}
+
+	let num = 20;
+
 </script>
+
+<!--Conditionals-->
+{#if num > 4}
+	<p>Number is greater than 4</p>
+{:else if num < 4}
+	<p>Number is less than 4</p>
+{:else}
+	<p>Number is 4</p>
+{/if}
 
 <!--Component - Main content-->
 <main>
 	{#each people as person (person.id)}
 		<div class="person">
 			<h2>{person.name}</h2>
+			<!--Another conditional-->>
+			{#if person.beltColor === 'black'}
+				<p><strong>MASTER NINJA</strong></p>
+			{/if}
 			<p>{person.age} years old</p>
 			<p style="color: {person.beltColor};">{person.beltColor} belt</p>
 			<button on:click={() => handleClick(person.id)}>delete</button>
@@ -32,6 +48,7 @@
 		padding: 0.5em;
 		max-width: 240px;
 		margin: 0 auto;
+		background-color: antiquewhite;
 	}
 
 	main h2 {
@@ -39,6 +56,11 @@
 		font-family: "EB Garamond", serif;
 		font-size: 2em;
 		font-weight: 700;
+	}
+
+	main strong {
+		color: #000;
+		font-weight: 800;
 	}
 
 	main p {
