@@ -6,9 +6,9 @@
 	let showModal = false;
 
 	let people = [
-		{ name: 'Bonnie Gachiengu', beltColor: 'orange', age: 30, id: 1 },
-		{ name: 'Enzo Ferrari', beltColor: 'red', age: 45, id: 2 },
-		{ name: 'Robert Einstein', beltColor: 'black', age: 40, id: 3 },
+		{ name: 'Bonnie Gachiengu', beltColor: 'orange', age: 30, id: 1, skills: ['Karate', 'Judo'] },
+		{ name: 'Enzo Ferrari', beltColor: 'red', age: 45, id: 2, skills: ['Driving', 'Engineering'] },
+		{ name: 'Robert Einstein', beltColor: 'black', age: 40, id: 3, skills: ['Physics', 'Mathematics'] },
 	];
 
 	const toggleModal = () => {
@@ -20,11 +20,17 @@
 		people = people.filter(person => person.id !== id);
 	}
 
+	const addPerson = (e) => {
+		// console.log(e.detail);
+		people = [e.detail, ...people];
+		showModal = false;
+	};
+
 </script>
 
 <!--Component - Modal-->
 <Modal {showModal} on:click={toggleModal}>
-	<AddPersonForm />
+	<AddPersonForm on:addPerson={addPerson}/>
 </Modal>
 
 <!--Component - Main content-->
@@ -39,6 +45,7 @@
 			{/if}
 			<p>{person.age} years old</p>
 			<p style="color: {person.beltColor};">{person.beltColor} belt</p>
+			<p>Skills: {person.skills.join(', ')}</p>
 			<button class="btn" on:click={() => handleDelete(person.id)}>Delete Person</button>
 		</div>
 		{:else}
