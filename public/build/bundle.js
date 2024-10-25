@@ -603,7 +603,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "No people to display...";
     			attr_dev(p, "class", "svelte-rw4lv7");
-    			add_location(p, file, 40, 2, 1050);
+    			add_location(p, file, 40, 2, 1049);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -636,9 +636,9 @@ var app = (function () {
     			strong = element("strong");
     			strong.textContent = "MASTER NINJA";
     			attr_dev(strong, "class", "svelte-rw4lv7");
-    			add_location(strong, file, 33, 7, 817);
+    			add_location(strong, file, 33, 7, 816);
     			attr_dev(p, "class", "svelte-rw4lv7");
-    			add_location(p, file, 33, 4, 814);
+    			add_location(p, file, 33, 4, 813);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -695,7 +695,7 @@ var app = (function () {
     			div = element("div");
     			h2 = element("h2");
     			t0 = text(t0_value);
-    			t1 = text("\n\t\t\t>\n\t\t\t");
+    			t1 = space();
     			if (if_block) if_block.c();
     			t2 = space();
     			p0 = element("p");
@@ -712,12 +712,12 @@ var app = (function () {
     			attr_dev(h2, "class", "svelte-rw4lv7");
     			add_location(h2, file, 30, 3, 718);
     			attr_dev(p0, "class", "svelte-rw4lv7");
-    			add_location(p0, file, 35, 3, 863);
+    			add_location(p0, file, 35, 3, 862);
     			set_style(p1, "color", /*person*/ ctx[4].beltColor);
     			attr_dev(p1, "class", "svelte-rw4lv7");
-    			add_location(p1, file, 36, 3, 896);
+    			add_location(p1, file, 36, 3, 895);
     			attr_dev(button, "class", "svelte-rw4lv7");
-    			add_location(button, file, 37, 3, 965);
+    			add_location(button, file, 37, 3, 964);
     			attr_dev(div, "class", "person svelte-rw4lv7");
     			add_location(div, file, 29, 2, 694);
     			this.first = div;

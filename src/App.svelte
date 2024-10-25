@@ -29,7 +29,7 @@
 	{#each people as person (person.id)}
 		<div class="person">
 			<h2>{person.name}</h2>
-			<!--Another conditional-->>
+			<!--Another conditional-->
 			{#if person.beltColor === 'black'}
 				<p><strong>MASTER NINJA</strong></p>
 			{/if}
