@@ -132,6 +132,29 @@ var app = (function () {
         else if (node.getAttribute(attribute) !== value)
             node.setAttribute(attribute, value);
     }
+    function get_binding_group_value(group, __value, checked) {
+        const value = new Set();
+        for (let i = 0; i < group.length; i += 1) {
+            if (group[i].checked)
+                value.add(group[i].__value);
+        }
+        if (!checked) {
+            value.delete(__value);
+        }
+        return Array.from(value);
+    }
+    function init_binding_group(group) {
+        let _inputs;
+        return {
+            /* push */ p(...inputs) {
+                _inputs = inputs;
+                _inputs.forEach(input => group.push(input));
+            },
+            /* remove */ r() {
+                _inputs.forEach(input => group.splice(group.indexOf(input), 1));
+            }
+        };
+    }
     function to_number(value) {
         return value === '' ? null : +value;
     }
@@ -148,6 +171,22 @@ var app = (function () {
         else {
             node.style.setProperty(key, value, important ? 'important' : '');
         }
+    }
+    function select_option(select, value, mounting) {
+        for (let i = 0; i < select.options.length; i += 1) {
+            const option = select.options[i];
+            if (option.__value === value) {
+                option.selected = true;
+                return;
+            }
+        }
+        if (!mounting || value !== undefined) {
+            select.selectedIndex = -1; // no option should be selected
+        }
+    }
+    function select_value(select) {
+        const selected_option = select.querySelector(':checked');
+        return selected_option && selected_option.__value;
     }
     function toggle_class(element, name, toggle) {
         element.classList[toggle ? 'add' : 'remove'](name);
@@ -859,11 +898,34 @@ var app = (function () {
     	let t0;
     	let input1;
     	let t1;
+    	let label0;
+    	let t3;
     	let input2;
-    	let t2;
+    	let t4;
+    	let br0;
+    	let t5;
+    	let input3;
+    	let t6;
+    	let br1;
+    	let t7;
+    	let input4;
+    	let t8;
+    	let br2;
+    	let t9;
+    	let label1;
+    	let t11;
+    	let select;
+    	let option0;
+    	let option1;
+    	let option2;
+    	let option3;
+    	let option4;
+    	let t17;
     	let button;
+    	let binding_group;
     	let mounted;
     	let dispose;
+    	binding_group = init_binding_group(/*$$binding_groups*/ ctx[8][0]);
 
     	const block = {
     		c: function create() {
@@ -872,30 +934,91 @@ var app = (function () {
     			t0 = space();
     			input1 = element("input");
     			t1 = space();
+    			label0 = element("label");
+    			label0.textContent = "Skills";
+    			t3 = space();
     			input2 = element("input");
-    			t2 = space();
+    			t4 = text("fighting");
+    			br0 = element("br");
+    			t5 = space();
+    			input3 = element("input");
+    			t6 = text("running");
+    			br1 = element("br");
+    			t7 = space();
+    			input4 = element("input");
+    			t8 = text("sneaking");
+    			br2 = element("br");
+    			t9 = space();
+    			label1 = element("label");
+    			label1.textContent = "Belt Color";
+    			t11 = space();
+    			select = element("select");
+    			option0 = element("option");
+    			option0.textContent = "Black";
+    			option1 = element("option");
+    			option1.textContent = "Brown";
+    			option2 = element("option");
+    			option2.textContent = "Green";
+    			option3 = element("option");
+    			option3.textContent = "Yellow";
+    			option4 = element("option");
+    			option4.textContent = "Orange";
+    			t17 = space();
     			button = element("button");
     			button.textContent = "Add Person";
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "placeholder", "name");
     			attr_dev(input0, "id", "name");
     			attr_dev(input0, "class", "svelte-gjic6b");
-    			add_location(input0, file$1, 12, 4, 214);
+    			add_location(input0, file$1, 13, 4, 244);
     			attr_dev(input1, "type", "number");
     			attr_dev(input1, "placeholder", "age");
     			attr_dev(input1, "id", "age");
     			attr_dev(input1, "class", "svelte-gjic6b");
-    			add_location(input1, file$1, 13, 4, 286);
-    			attr_dev(input2, "type", "text");
-    			attr_dev(input2, "placeholder", "belt color");
-    			attr_dev(input2, "id", "beltColor");
+    			add_location(input1, file$1, 14, 4, 316);
+    			add_location(label0, file$1, 16, 4, 449);
+    			attr_dev(input2, "type", "checkbox");
+    			input2.__value = "fighting";
+    			input2.value = input2.__value;
     			attr_dev(input2, "class", "svelte-gjic6b");
-    			add_location(input2, file$1, 14, 4, 357);
+    			add_location(input2, file$1, 17, 4, 476);
+    			add_location(br0, file$1, 17, 72, 544);
+    			attr_dev(input3, "type", "checkbox");
+    			input3.__value = "running";
+    			input3.value = input3.__value;
+    			attr_dev(input3, "class", "svelte-gjic6b");
+    			add_location(input3, file$1, 18, 4, 554);
+    			add_location(br1, file$1, 18, 70, 620);
+    			attr_dev(input4, "type", "checkbox");
+    			input4.__value = "sneaking";
+    			input4.value = input4.__value;
+    			attr_dev(input4, "class", "svelte-gjic6b");
+    			add_location(input4, file$1, 19, 4, 630);
+    			add_location(br2, file$1, 19, 72, 698);
+    			add_location(label1, file$1, 21, 4, 770);
+    			option0.__value = "black";
+    			option0.value = option0.__value;
+    			add_location(option0, file$1, 23, 8, 842);
+    			option1.__value = "brown";
+    			option1.value = option1.__value;
+    			add_location(option1, file$1, 24, 8, 888);
+    			option2.__value = "green";
+    			option2.value = option2.__value;
+    			add_location(option2, file$1, 25, 8, 934);
+    			option3.__value = "yellow";
+    			option3.value = option3.__value;
+    			add_location(option3, file$1, 26, 8, 980);
+    			option4.__value = "orange";
+    			option4.value = option4.__value;
+    			add_location(option4, file$1, 27, 8, 1028);
+    			if (/*beltColor*/ ctx[2] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[11].call(select));
+    			add_location(select, file$1, 22, 4, 801);
     			attr_dev(button, "class", "btn svelte-gjic6b");
     			attr_dev(button, "type", "submit");
-    			add_location(button, file$1, 15, 4, 445);
+    			add_location(button, file$1, 29, 4, 1087);
     			attr_dev(form, "class", "svelte-gjic6b");
-    			add_location(form, file$1, 11, 0, 162);
+    			add_location(form, file$1, 12, 0, 192);
+    			binding_group.p(input2, input3, input4);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -908,17 +1031,44 @@ var app = (function () {
     			append_dev(form, input1);
     			set_input_value(input1, /*age*/ ctx[1]);
     			append_dev(form, t1);
+    			append_dev(form, label0);
+    			append_dev(form, t3);
     			append_dev(form, input2);
-    			set_input_value(input2, /*beltColor*/ ctx[2]);
-    			append_dev(form, t2);
+    			input2.checked = ~(/*skills*/ ctx[3] || []).indexOf(input2.__value);
+    			append_dev(form, t4);
+    			append_dev(form, br0);
+    			append_dev(form, t5);
+    			append_dev(form, input3);
+    			input3.checked = ~(/*skills*/ ctx[3] || []).indexOf(input3.__value);
+    			append_dev(form, t6);
+    			append_dev(form, br1);
+    			append_dev(form, t7);
+    			append_dev(form, input4);
+    			input4.checked = ~(/*skills*/ ctx[3] || []).indexOf(input4.__value);
+    			append_dev(form, t8);
+    			append_dev(form, br2);
+    			append_dev(form, t9);
+    			append_dev(form, label1);
+    			append_dev(form, t11);
+    			append_dev(form, select);
+    			append_dev(select, option0);
+    			append_dev(select, option1);
+    			append_dev(select, option2);
+    			append_dev(select, option3);
+    			append_dev(select, option4);
+    			select_option(select, /*beltColor*/ ctx[2], true);
+    			append_dev(form, t17);
     			append_dev(form, button);
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[4]),
-    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[5]),
-    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[6]),
-    					listen_dev(form, "submit", prevent_default(/*handleSubmit*/ ctx[3]), false, true, false, false)
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[5]),
+    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[6]),
+    					listen_dev(input2, "change", /*input2_change_handler*/ ctx[7]),
+    					listen_dev(input3, "change", /*input3_change_handler*/ ctx[9]),
+    					listen_dev(input4, "change", /*input4_change_handler*/ ctx[10]),
+    					listen_dev(select, "change", /*select_change_handler*/ ctx[11]),
+    					listen_dev(form, "submit", prevent_default(/*handleSubmit*/ ctx[4]), false, true, false, false)
     				];
 
     				mounted = true;
@@ -933,14 +1083,27 @@ var app = (function () {
     				set_input_value(input1, /*age*/ ctx[1]);
     			}
 
-    			if (dirty & /*beltColor*/ 4 && input2.value !== /*beltColor*/ ctx[2]) {
-    				set_input_value(input2, /*beltColor*/ ctx[2]);
+    			if (dirty & /*skills*/ 8) {
+    				input2.checked = ~(/*skills*/ ctx[3] || []).indexOf(input2.__value);
+    			}
+
+    			if (dirty & /*skills*/ 8) {
+    				input3.checked = ~(/*skills*/ ctx[3] || []).indexOf(input3.__value);
+    			}
+
+    			if (dirty & /*skills*/ 8) {
+    				input4.checked = ~(/*skills*/ ctx[3] || []).indexOf(input4.__value);
+    			}
+
+    			if (dirty & /*beltColor*/ 4) {
+    				select_option(select, /*beltColor*/ ctx[2]);
     			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(form);
+    			binding_group.r();
     			mounted = false;
     			run_all(dispose);
     		}
@@ -963,9 +1126,10 @@ var app = (function () {
     	let name;
     	let age;
     	let beltColor;
+    	let skills = [];
 
     	const handleSubmit = () => {
-    		console.log(name, age, beltColor);
+    		console.log(name, age, beltColor, skills);
     	};
 
     	const writable_props = [];
@@ -973,6 +1137,8 @@ var app = (function () {
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<AddPersonForm> was created with unknown prop '${key}'`);
     	});
+
+    	const $$binding_groups = [[]];
 
     	function input0_input_handler() {
     		name = this.value;
@@ -984,17 +1150,39 @@ var app = (function () {
     		$$invalidate(1, age);
     	}
 
-    	function input2_input_handler() {
-    		beltColor = this.value;
+    	function input2_change_handler() {
+    		skills = get_binding_group_value($$binding_groups[0], this.__value, this.checked);
+    		$$invalidate(3, skills);
+    	}
+
+    	function input3_change_handler() {
+    		skills = get_binding_group_value($$binding_groups[0], this.__value, this.checked);
+    		$$invalidate(3, skills);
+    	}
+
+    	function input4_change_handler() {
+    		skills = get_binding_group_value($$binding_groups[0], this.__value, this.checked);
+    		$$invalidate(3, skills);
+    	}
+
+    	function select_change_handler() {
+    		beltColor = select_value(this);
     		$$invalidate(2, beltColor);
     	}
 
-    	$$self.$capture_state = () => ({ name, age, beltColor, handleSubmit });
+    	$$self.$capture_state = () => ({
+    		name,
+    		age,
+    		beltColor,
+    		skills,
+    		handleSubmit
+    	});
 
     	$$self.$inject_state = $$props => {
     		if ('name' in $$props) $$invalidate(0, name = $$props.name);
     		if ('age' in $$props) $$invalidate(1, age = $$props.age);
     		if ('beltColor' in $$props) $$invalidate(2, beltColor = $$props.beltColor);
+    		if ('skills' in $$props) $$invalidate(3, skills = $$props.skills);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -1005,10 +1193,15 @@ var app = (function () {
     		name,
     		age,
     		beltColor,
+    		skills,
     		handleSubmit,
     		input0_input_handler,
     		input1_input_handler,
-    		input2_input_handler
+    		input2_change_handler,
+    		$$binding_groups,
+    		input3_change_handler,
+    		input4_change_handler,
+    		select_change_handler
     	];
     }
 

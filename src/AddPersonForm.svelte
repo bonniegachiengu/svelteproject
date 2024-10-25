@@ -2,9 +2,10 @@
     let name;
     let age;
     let beltColor;
+    let skills = [];
 
     const handleSubmit = () => {
-        console.log(name, age, beltColor);
+        console.log(name, age, beltColor, skills);
     };
 
 </script>
@@ -12,7 +13,20 @@
 <form on:submit|preventDefault={handleSubmit}>
     <input type="text" placeholder="name" id="name" bind:value={name}>
     <input type="number" placeholder="age" id="age" bind:value={age}>
-    <input type="text" placeholder="belt color" id="beltColor" bind:value={beltColor}>
+    <!-- svelte-ignore a11y-label-has-associated-control -->
+    <label>Skills</label>
+    <input type="checkbox" bind:group={skills} value="fighting">fighting<br>
+    <input type="checkbox" bind:group={skills} value="running">running<br>
+    <input type="checkbox" bind:group={skills} value="sneaking">sneaking<br>
+    <!-- svelte-ignore a11y-label-has-associated-control -->
+    <label>Belt Color</label>
+    <select bind:value={beltColor}>
+        <option value="black">Black</option>
+        <option value="brown">Brown</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="orange">Orange</option>
+    </select>
     <button class="btn" type="submit">Add Person</button>
 </form>
 
