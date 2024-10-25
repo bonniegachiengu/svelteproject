@@ -2,12 +2,17 @@
 	// import the Modal component
 	import Modal from './Modal.svelte';
 
+	let showModal = false;
+
 	let people = [
 		{ name: 'Bonnie Gachiengu', beltColor: 'orange', age: 30, id: 1 },
 		{ name: 'Enzo Ferrari', beltColor: 'red', age: 45, id: 2 },
 		{ name: 'Robert Einstein', beltColor: 'black', age: 40, id: 3 },
-		{ name: 'Neil deGrasse Tyson', beltColor: 'green', age: 60, id: 4 }
 	];
+
+	const toggleModal = () => {
+		showModal = !showModal;
+	}
 
 	const handleClick = (id) => {
 		// remove the last person from the array people
@@ -18,20 +23,12 @@
 
 </script>
 
-<!--Conditionals-->
-<!-- {#if num > 4}
-	<p>Number is greater than 4</p>
-{:else if num < 4}
-	<p>Number is less than 4</p>
-{:else}
-	<p>Number is 4</p>
-{/if} -->
-
 <!--Component - Modal-->
-<Modal message = "Hey I am a prop value" isPromo = {true}/>
+<Modal message = "Hey I am a prop value" {showModal} on:click={toggleModal}/>
 
 <!--Component - Main content-->
 <main>
+	<button class="btn" on:click={toggleModal}>Toggle Modal</button>
 	{#each people as person (person.id)}
 		<div class="person">
 			<h2>{person.name}</h2>
@@ -41,7 +38,7 @@
 			{/if}
 			<p>{person.age} years old</p>
 			<p style="color: {person.beltColor};">{person.beltColor} belt</p>
-			<button class="btn" on:click={() => handleClick(person.id)}>delete</button>
+			<button class="btn" on:click={handleClick}>delete</button>
 		</div>
 		{:else}
 		<p>No people to display...</p>

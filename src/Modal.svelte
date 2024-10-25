@@ -1,16 +1,14 @@
 <script>
     export let message = "default message";
-    let showModal = true;
-    export let dontDelete = true;
+    export let showModal = false;
+    export let dontDelete = false;
 </script>
 
 {#if showModal}
-    <div class="backdrop" class:delete={dontDelete}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="backdrop" class:delete={dontDelete} on:click>
         <div class="modal">
-            <h2>Are you sure?</h2>
             <p>{message}</p>
-            <button class="btn" on:click={() => dontDelete = false}>Yes, delete</button>
-            <button class="btn btn--alt" on:click={() => showModal = false}>No, cancel</button>
         </div>
     </div>
 {/if}
@@ -37,22 +35,6 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
         padding: 1rem;
         text-align: center;
-    }
-
-    .btn {
-        font: inherit;
-        cursor: pointer;
-        border: 1px solid #ccc;
-        padding: 0.25rem 1rem;
-        background: #ff2050;
-        color: white;
-        border-radius: 6px;
-    }
-
-    .btn--alt {
-        background: #f1f1f1;
-        color: #333;
-        border: 1px solid #ccc;
     }
 
     .delete .modal {
