@@ -1,4 +1,7 @@
 <script>
+	// import the Modal component
+	import Modal from './Modal.svelte';
+
 	let people = [
 		{ name: 'Bonnie Gachiengu', beltColor: 'orange', age: 30, id: 1 },
 		{ name: 'Enzo Ferrari', beltColor: 'red', age: 45, id: 2 },
@@ -16,13 +19,16 @@
 </script>
 
 <!--Conditionals-->
-{#if num > 4}
+<!-- {#if num > 4}
 	<p>Number is greater than 4</p>
 {:else if num < 4}
 	<p>Number is less than 4</p>
 {:else}
 	<p>Number is 4</p>
-{/if}
+{/if} -->
+
+<!--Component - Modal-->
+<Modal />
 
 <!--Component - Main content-->
 <main>
@@ -35,7 +41,7 @@
 			{/if}
 			<p>{person.age} years old</p>
 			<p style="color: {person.beltColor};">{person.beltColor} belt</p>
-			<button on:click={() => handleClick(person.id)}>delete</button>
+			<button class="btn" on:click={() => handleClick(person.id)}>delete</button>
 		</div>
 		{:else}
 		<p>No people to display...</p>
@@ -75,7 +81,7 @@
 		margin: 0.2em 0;
 	}
 
-	button {
+	.btn {
 		background-color: #f43675;
 		border: none;
 		color: white;
@@ -88,11 +94,11 @@
 		cursor: pointer;
 	}
 
-	button:hover {
+	.btn:hover {
 		background-color: #d32f5d;
 	}
 
-	button:active {
+	.btn:active {
 		background-color: #ff407f;
 	}
 
